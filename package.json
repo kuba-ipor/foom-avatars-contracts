@@ -1,0 +1,18 @@
+{
+  "name": "contracts",
+  "version": "1.0.0",
+  "description": "This repository contains the smart contracts for the Foom Genius Answer system, which allows users to publish genius answers by burning genius tokens.",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "forge test",
+    "build": "forge build",
+    "deploy": "forge script script/Deploy.s.sol:DeployScript --rpc-url http://localhost:8546 --broadcast -vvvv",
+    "anvil": "anvil --port 8546"
+  },
+  "author": "",
+  "license": "ISC"
+}

@@ -11,9 +11,15 @@ contract DeployScript is Script {
     uint256 public constant INITIAL_PUBLISH_COST = 100 ether;     // 100 tokens per answer
 
     function run() external {
-        // Retrieve deployer private key from environment
-        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
+        uint256 deployerPrivateKey;
         
+        // Try to get private key from env, otherwise use Anvil's default key
+        try vm.envUint("PRIVATE_KEY") returns (uint256 key) {
+            deployerPrivateKey = key;
+        } catch {
+            deployerPrivateKey = 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80;
+        }
+
         // Start broadcasting transactions
         vm.startBroadcast(deployerPrivateKey);
 
