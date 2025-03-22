@@ -2,9 +2,10 @@
 pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 /**
  * @title FoomGeniusAnswer
@@ -14,7 +15,7 @@ contract FoomGeniusAnswer is Ownable, ReentrancyGuard {
     using SafeERC20 for IERC20;
 
     // The genius token used for payments
-    IERC20 public geniusToken;
+    ERC20Burnable public geniusToken;
     
     // Cost in genius tokens to publish an answer
     uint256 public publishCost;
@@ -53,7 +54,7 @@ contract FoomGeniusAnswer is Ownable, ReentrancyGuard {
         require(_geniusToken != address(0), "Invalid token address");
         require(_initialPublishCost > 0, "Invalid publish cost");
         
-        geniusToken = IERC20(_geniusToken);
+        geniusToken = ERC20Burnable(_geniusToken);
         publishCost = _initialPublishCost;
     }
     
@@ -66,10 +67,10 @@ contract FoomGeniusAnswer is Ownable, ReentrancyGuard {
         require(bytes(_answer).length <= 2000, "Answer too long");
         
         // Transfer tokens from user to this contract
-        geniusToken.safeTransferFrom(msg.sender, address(this), publishCost);
+        geniusToken.transferFrom(msg.sender, address(this), publishCost);
         
-        // Burn the tokens by sending them to address(0)
-        geniusToken.safeTransfer(address(0), publishCost);
+        // Burn the tokens
+        geniusToken.burn(publishCost);
         
         // Create new answer
         uint256 answerId = totalAnswers;
@@ -115,4 +116,4 @@ contract FoomGeniusAnswer is Ownable, ReentrancyGuard {
         Answer memory a = answers[_answerId];
         return (a.publisher, a.answer, a.timestamp, a.tokensBurned);
     }
-}
+} 

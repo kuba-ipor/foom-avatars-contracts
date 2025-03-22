@@ -1,66 +1,90 @@
-## Foundry
+# Foom Genius Answer Smart Contracts
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+This repository contains the smart contracts for the Foom Genius Answer system, which allows users to publish genius answers by burning genius tokens.
 
-Foundry consists of:
+## Contracts
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+- `GeniusToken.sol`: ERC20 token contract for the genius token
+- `FoomGeniusAnswer.sol`: Main contract for publishing and managing genius answers
 
-## Documentation
+## Development
 
-https://book.getfoundry.sh/
+### Prerequisites
 
-## Usage
+- [Foundry](https://book.getfoundry.sh/getting-started/installation)
+
+### Setup
+
+1. Clone the repository
+2. Install dependencies:
+```bash
+forge install
+```
 
 ### Build
 
-```shell
-$ forge build
+```bash
+forge build
 ```
 
 ### Test
 
-```shell
-$ forge test
+Run tests:
+```bash
+forge test
 ```
 
-### Format
-
-```shell
-$ forge fmt
+Run tests with gas reporting:
+```bash
+forge test --gas-report
 ```
 
-### Gas Snapshots
-
-```shell
-$ forge snapshot
+Run tests with more verbosity:
+```bash
+forge test -vvv
 ```
 
-### Anvil
+### Deployment
 
-```shell
-$ anvil
+1. Create a `.env` file with your private key:
+```bash
+echo "PRIVATE_KEY=your_private_key_here" > .env
 ```
 
-### Deploy
+2. Deploy to a network:
 
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
+Testnet (Sepolia):
+```bash
+forge script script/Deploy.s.sol:DeployScript --rpc-url $SEPOLIA_RPC_URL --broadcast --verify -vvvv
 ```
 
-### Cast
-
-```shell
-$ cast <subcommand>
+Mainnet:
+```bash
+forge script script/Deploy.s.sol:DeployScript --rpc-url $MAINNET_RPC_URL --broadcast --verify -vvvv
 ```
 
-### Help
+### Contract Verification
 
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
+The deployment script automatically verifies contracts if you use the `--verify` flag. Make sure you have set up your API keys:
+
+```bash
+export ETHERSCAN_API_KEY=your_etherscan_api_key
 ```
+
+## Configuration
+
+The deployment configuration can be modified in `script/Deploy.s.sol`:
+
+- `INITIAL_SUPPLY`: Initial supply of genius tokens (default: 1 billion)
+- `INITIAL_PUBLISH_COST`: Initial cost to publish an answer (default: 100 tokens)
+
+## Security
+
+- The contracts use OpenZeppelin's secure implementations
+- ReentrancyGuard is implemented to prevent reentrancy attacks
+- Token burning mechanism is implemented using transfer to address(0)
+- Access control is implemented using Ownable
+
+## License
+
+MIT
