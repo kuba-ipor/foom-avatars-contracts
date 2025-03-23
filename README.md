@@ -1,11 +1,11 @@
-# Foom Genius Answer Smart Contracts
+# FOOM Smart Contracts
 
-This repository contains the smart contracts for the Foom Genius Answer system, which allows users to publish genius answers by burning genius tokens.
+This repository contains the smart contracts for the FOOM platform's content verification and publishing system.
 
 ## Contracts
 
-- `GeniusToken.sol`: ERC20 token contract for the genius token
-- `FoomGeniusAnswer.sol`: Main contract for publishing and managing genius answers
+- `GeniusToken.sol`: ERC20 token contract used for content publishing and verification, created per each Genius
+- `FoomGeniusAnswer.sol`: Main contract for managing verified content publishing
 
 ## Development
 
